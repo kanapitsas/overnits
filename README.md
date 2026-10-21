@@ -1,7 +1,7 @@
 # overnits
 
 Push a MacBook Pro XDR display past its SDR brightness ceiling, using only
-public macOS APIs. Roughly 250 lines of Swift, no dependencies.
+public macOS APIs. Roughly 300 lines of Swift, no dependencies.
 
 The built-in display of a 14"/16" MacBook Pro reaches 1000 nits sustained and
 1600 nits peak, but macOS caps ordinary (SDR) content at 500 or 600 nits
