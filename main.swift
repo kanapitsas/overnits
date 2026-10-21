@@ -36,7 +36,9 @@ enum Options {
               i + 1 < CommandLine.arguments.count else { return nil }
         return CommandLine.arguments[i + 1]
     }
-    static let boost   = Float(value("--boost") ?? "") ?? 1.0
+    // nil si --boost est absent : un --boost 1.0 explicite doit pouvoir
+    // l'emporter sur le niveau memorise (cf. README, section Caveats).
+    static let boost   = value("--boost").flatMap { Float($0) }
     static let seconds = Double(value("--seconds") ?? "") ?? 0
     static let log     = CommandLine.arguments.contains("--log")
 }
@@ -198,7 +200,7 @@ final class Controller: NSObject, NSApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(screensChanged),
             name: NSApplication.didChangeScreenParametersNotification, object: nil)
         let saved = UserDefaults.standard.float(forKey: Controller.savedKey)
-        if Options.boost > 1.001 { boost = Options.boost }
+        if let forced = Options.boost { boost = forced }
         else if saved > 1.001 { boost = saved }
         if Options.seconds > 0 {
             Timer.scheduledTimer(withTimeInterval: Options.seconds, repeats: false) { _ in NSApp.terminate(nil) }
